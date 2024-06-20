@@ -58,6 +58,7 @@
             txtTest.Name = "txtTest";
             txtTest.Size = new Size(382, 50);
             txtTest.TabIndex = 2;
+            txtTest.TextChanged += txtTest_TextChanged;
             // 
             // label1
             // 
@@ -83,7 +84,7 @@
             // 
             // button1
             // 
-            button1.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button1.Location = new Point(29, 186);
             button1.Name = "button1";
             button1.Size = new Size(70, 70);
@@ -93,7 +94,7 @@
             // 
             // button2
             // 
-            button2.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button2.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button2.Location = new Point(107, 186);
             button2.Name = "button2";
             button2.Size = new Size(70, 70);
@@ -103,6 +104,7 @@
             // 
             // button3
             // 
+            button3.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button3.Location = new Point(186, 186);
             button3.Name = "button3";
             button3.Size = new Size(70, 70);
@@ -112,6 +114,7 @@
             // 
             // button4
             // 
+            button4.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button4.Location = new Point(265, 186);
             button4.Name = "button4";
             button4.Size = new Size(70, 70);
@@ -168,6 +171,7 @@
             // 
             // button10
             // 
+            button10.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button10.Location = new Point(29, 272);
             button10.Name = "button10";
             button10.Size = new Size(70, 70);
