@@ -1,126 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+using System.Data;
+using System.Text;
 
-public class Class1
+namespace PracticePractice
 {
-    public double Evaluate(string expression)
+    public static class ExpressionEvaluator
     {
-        expression = FixImplicitMultiplication(expression);
-
-        var values = new Stack<double>();
-        var operators = new Stack<char>();
-        int i = 0;
-
-        while (i < expression.Length)
+        public static double Evaluate(string expression)
         {
-            if (char.IsWhiteSpace(expression[i]))
+            try
             {
-                i++;
-                continue;
+                expression = FixParentheses(expression);
+                var result = new DataTable().Compute(expression, null);
+                return Convert.ToDouble(result);
             }
-
-            if (char.IsDigit(expression[i]) || expression[i] == '.')
+            catch (FormatException)
             {
-                string value = "";
-                while (i < expression.Length && (char.IsDigit(expression[i]) || expression[i] == '.'))
+                throw new ArgumentException("Invalid format in expression");
+            }
+            catch (InvalidExpressionException)
+            {
+                throw new ArgumentException("Invalid expression");
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Error evaluating expression", ex);
+            }
+        }
+
+        private static string FixParentheses(string expression)
+        {
+            StringBuilder fixedExpression = new StringBuilder();
+
+            for (int i = 0; i < expression.Length; i++)
+            {
+                char currentChar = expression[i];
+                fixedExpression.Append(currentChar);
+
+                if (i + 1 < expression.Length)
                 {
-                    value += expression[i];
-                    i++;
+                    char nextChar = expression[i + 1];
+                    if ((currentChar == ')' && (Char.IsDigit(nextChar) || nextChar == '(')) ||
+                        (Char.IsDigit(currentChar) && nextChar == '('))
+                    {
+                        fixedExpression.Append('*'); 
+                    }
                 }
-                values.Push(double.Parse(value, CultureInfo.InvariantCulture));
             }
-            else if (expression[i] == '(')
-            {
-                operators.Push(expression[i]);
-                i++;
-            }
-            else if (expression[i] == ')')
-            {
-                while (operators.Count > 0 && operators.Peek() != '(')
-                {
-                    double b = values.Pop();
-                    double a = values.Pop();
-                    char op = operators.Pop();
-                    values.Push(ApplyOperation(a, b, op));
-                }
-                operators.Pop(); 
-                i++;
-            }
-            else if (IsOperator(expression[i]))
-            {
-                while (operators.Count > 0 && ShouldApplyOperator(expression[i], operators.Peek()))
-                {
-                    double b = values.Pop();
-                    double a = values.Pop();
-                    char op = operators.Pop();
-                    values.Push(ApplyOperation(a, b, op));
-                }
-                operators.Push(expression[i]);
-                i++;
-            }
-            else
-            {
-                throw new ArgumentException("Invalid character in expression");
-            }
+
+            return fixedExpression.ToString();
         }
-
-        while (operators.Count > 0)
-        {
-            double b = values.Pop();
-            double a = values.Pop();
-            char op = operators.Pop();
-            values.Push(ApplyOperation(a, b, op));
-        }
-
-        return values.Pop();
-    }
-
-    private bool IsOperator(char c)
-    {
-        return c == '+' || c == '-' || c == '*' || c == '/';
-    }
-
-    private bool ShouldApplyOperator(char newOp, char existingOp)
-    {
-        int precedenceNew = GetPrecedence(newOp);
-        int precedenceExisting = GetPrecedence(existingOp);
-
-        return precedenceNew <= precedenceExisting;
-    }
-
-    private int GetPrecedence(char op)
-    {
-        switch (op)
-        {
-            case '+':
-            case '-':
-                return 1;
-            case '*':
-            case '/':
-                return 2;
-            default:
-                return 0;
-        }
-    }
-
-    private double ApplyOperation(double a, double b, char op)
-    {
-        switch (op)
-        {
-            case '+': return a + b;
-            case '-': return a - b;
-            case '*': return a * b;
-            case '/': return a / b;
-            default: throw new ArgumentException("Invalid operator");
-        }
-    }
-
-    private string FixImplicitMultiplication(string expression)
-    {
-        string pattern = @"(\d+)(\()";
-        string replacement = @"$1*$2";
-
-        return System.Text.RegularExpressions.Regex.Replace(expression, pattern, replacement);
     }
 }

@@ -342,7 +342,7 @@
             MaximizeBox = false;
             Name = "calculator";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Calculator";
+            Text = "&";
             WindowState = FormWindowState.Minimized;
             Load += Form1_Load;
             ResumeLayout(false);

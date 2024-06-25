@@ -2,12 +2,9 @@ namespace PracticePractice
 {
     public partial class calculator : Form
     {
-        private Class1 solver;
         public calculator()
         {
             InitializeComponent();
-            solver = new Class1();
-
         }
 
 
@@ -118,12 +115,18 @@ namespace PracticePractice
             try
             {
                 string expression = txtResult.Text;
-                var result = solver.Evaluate(expression);
-                lblResult.Text = result.ToString("0.00");
+                double result = ExpressionEvaluator.Evaluate(expression);
+                lblResult.Text = result.ToString();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                lblResult.Text = "Error";
+                lblResult.Text = "Error: " + ex.Message;
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception)
+            {
+                lblResult.Text = "Unknown Error";
+                MessageBox.Show("An unknown error occurred.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
